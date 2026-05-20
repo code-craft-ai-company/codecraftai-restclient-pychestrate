@@ -16,20 +16,20 @@ import yaml
 
 from automojo.credentials.basecredential import BaseCredential
 
-from automojo.restclient.pychestrate.pychestraterestclient import PychestrateRestClient
+from automojo.pychestrate.rest.client.pychestraterestclient import PychestrateRestClient
 
-from automojo.restclient.pychestrate.groups.clients import ClientsApiGroup
-from automojo.restclient.pychestrate.groups.pods import PodsApiGroup
-from automojo.restclient.pychestrate.groups.runs import RunsApiGroup
+from automojo.pychestrate.rest.client.groups.clients import ClientsApiGroup
+from automojo.pychestrate.rest.client.groups.pods import PodsApiGroup
+from automojo.pychestrate.rest.client.groups.runs import RunsApiGroup
 
-from automojo.restclient.pychestrate.models.runs import Run
+from automojo.pychestrate.rest.client.models.runs import Run
 
 
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(THIS_DIR, "..", "..", "..", ".."))
 EMBEDDED_SPEC = os.path.join(
     REPO_ROOT,
-    "source", "packages", "automojo", "restclient", "pychestrate",
+    "source", "packages", "automojo", "pychestrate", "rest", "client",
     "generation", "specs", "pychestrate.yaml",
 )
 

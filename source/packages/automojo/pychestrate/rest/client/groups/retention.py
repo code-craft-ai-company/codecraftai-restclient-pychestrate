@@ -2,22 +2,21 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.retention import Retentionpolicy
+from automojo.pychestrate.rest.client.models.retention import Retentionpolicycreaterequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.client import Client
-from automojo.restclient.pychestrate.models.clients import Clientattributesupdaterequest
-from automojo.restclient.pychestrate.models.clients import Clientrevokerequest
 
 
-class ClientsApiGroup(RestApiGroup):
+class RetentionApiGroup(RestApiGroup):
     """
-        Registered pod client agents.
+        Per-data-class retention policies.
     """
 
-    def clients_get_by_id(self, client_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Client:
+    def retention_create(self, body: Retentionpolicycreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Read a client.
+            Create a retention policy.
         """
         client = self.client
         if aspects is None:
@@ -27,9 +26,41 @@ class ClientsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/clients/{client_id}"
+        call_leaf = "/retention/policies"
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [201]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="POST",
+            params=query_params if query_params else None,
+            body=body,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        return resp.json()
+
+    def retention_get_by_id(self, policy_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Retentionpolicy:
+        """
+            Read a retention policy.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/retention/policies/{policy_id}"
         path_params = {
-            'client_id': client_id,
+            'policy_id': policy_id,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -50,12 +81,12 @@ class ClientsApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Client.from_dict(raw_data)
+        rtnobj = Retentionpolicy.from_dict(raw_data)
         return rtnobj
 
-    def clients_list(self, *, page: Optional[int] = 1, per_page: Optional[int] = 50, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def retention_list(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
         """
-            List enrolled clients.
+            List retention policies.
         """
         client = self.client
         if aspects is None:
@@ -65,13 +96,9 @@ class ClientsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/clients"
+        call_leaf = "/retention/policies"
 
-        query_params = {}
-        if page is not None:
-            query_params['page'] = page
-        if per_page is not None:
-            query_params['per_page'] = per_page
+        query_params = None
 
 
         if exp_status is None:
@@ -90,9 +117,9 @@ class ClientsApiGroup(RestApiGroup):
         raw_data = resp.json()
         return self._parse_item(raw_data, Dict[str, Any])
 
-    def clients_revoke(self, client_id: str, body: Clientrevokerequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Client:
+    def retention_publish(self, policy_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Retentionpolicy:
         """
-            Revoke a client's enrollment.
+            Publish (activate) a retention policy.
         """
         client = self.client
         if aspects is None:
@@ -102,9 +129,9 @@ class ClientsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/clients/{client_id}/revoke"
+        leaf_template = "/retention/policies/{policy_id}/publish"
         path_params = {
-            'client_id': client_id,
+            'policy_id': policy_id,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -118,50 +145,12 @@ class ClientsApiGroup(RestApiGroup):
             leaf=call_leaf,
             method="POST",
             params=query_params if query_params else None,
-            body=body,
+            body=None,
             exp_status=exp_status,
             headers=header_params if header_params else None,
             context_msg=None,
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Client.from_dict(raw_data)
-        return rtnobj
-
-    def clients_update_attributes(self, client_id: str, body: Clientattributesupdaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Client:
-        """
-            Replace a client's attributes.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        leaf_template = "/clients/{client_id}/attributes"
-        path_params = {
-            'client_id': client_id,
-        }
-        call_leaf = leaf_template.format(**path_params)
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="PUT",
-            params=query_params if query_params else None,
-            body=body,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        rtnobj = Client.from_dict(raw_data)
+        rtnobj = Retentionpolicy.from_dict(raw_data)
         return rtnobj

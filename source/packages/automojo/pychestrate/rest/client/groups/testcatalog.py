@@ -2,21 +2,29 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.testcatalog import Testcatalogentry
+from automojo.pychestrate.rest.client.models.testcatalog import Testcatalogentrypage
+from automojo.pychestrate.rest.client.models.testcatalog import Testcatalogentryupsertrequest
+from automojo.pychestrate.rest.client.models.testcatalog import Testcatalogimportrequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.runs import Run
-from automojo.restclient.pychestrate.models.runs import Runpage
 
 
-class RunsApiGroup(RestApiGroup):
+class TestCatalogApiGroup(RestApiGroup):
     """
-        Run-state reads (`GET /runs/...`).
+        Per-project test-catalog entries.
     """
 
-    def runs_get_by_id(self, run_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Run:
+    def test_catalog_import(self, project_id: str, body: Testcatalogimportrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Read a run.
+            Run a test-catalog importer (e.g., testbase project discovery).
+            
+            Invokes the named importer (resolved via the
+`test_catalog_importer` factory protocol) against the project.
+Each import overwrites entries with the same
+`(project_id, importer_tag, entry_key)` key in place.
+
         """
         client = self.client
         if aspects is None:
@@ -26,9 +34,9 @@ class RunsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/runs/{run_id}"
+        leaf_template = "/projects/{project_id}/test-catalog:import"
         path_params = {
-            'run_id': run_id,
+            'project_id': project_id,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -36,25 +44,23 @@ class RunsApiGroup(RestApiGroup):
 
 
         if exp_status is None:
-            exp_status = [200]
+            exp_status = [202]
 
         resp = client.perform_call(
             leaf=call_leaf,
-            method="GET",
+            method="POST",
             params=query_params if query_params else None,
-            body=None,
+            body=body,
             exp_status=exp_status,
             headers=header_params if header_params else None,
             context_msg=None,
             aspects=aspects,
         )
-        raw_data = resp.json()
-        rtnobj = Run.from_dict(raw_data)
-        return rtnobj
+        return resp.json()
 
-    def runs_list(self, *, project_id: Optional[str] = None, pod_id: Optional[str] = None, state: Optional[str] = None, page: Optional[int] = 1, per_page: Optional[int] = 50, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Runpage:
+    def test_catalog_list(self, project_id: str, *, importer_tag: Optional[str] = None, include_retired: Optional[bool] = False, page: Optional[int] = 1, per_page: Optional[int] = 50, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Testcatalogentrypage:
         """
-            List runs (with filters).
+            List test-catalog entries for a project.
         """
         client = self.client
         if aspects is None:
@@ -64,15 +70,17 @@ class RunsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/runs"
+        leaf_template = "/projects/{project_id}/test-catalog"
+        path_params = {
+            'project_id': project_id,
+        }
+        call_leaf = leaf_template.format(**path_params)
 
         query_params = {}
-        if project_id is not None:
-            query_params['project_id'] = project_id
-        if pod_id is not None:
-            query_params['pod_id'] = pod_id
-        if state is not None:
-            query_params['state'] = state
+        if importer_tag is not None:
+            query_params['importer_tag'] = importer_tag
+        if include_retired is not None:
+            query_params['include_retired'] = include_retired
         if page is not None:
             query_params['page'] = page
         if per_page is not None:
@@ -93,22 +101,12 @@ class RunsApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Runpage.from_dict(raw_data)
+        rtnobj = Testcatalogentrypage.from_dict(raw_data)
         return rtnobj
 
-    def runs_subscribe_events(self, run_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+    def test_catalog_upsert(self, project_id: str, body: Testcatalogentryupsertrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Testcatalogentry:
         """
-            Subscribe to run events via Server-Sent Events.
-            
-            Long-lived response stream encoded as `text/event-stream`
-(Server-Sent Events). Each SSE frame's `data:` payload is a
-JSON document conforming to the `RunEvent` schema; the SSE
-`event:` line carries the event type
-(`state_changed` | `progress` | `result_manifest` | `heartbeat`).
-
-Clients should send `Accept: text/event-stream` and reconnect
-with `Last-Event-ID` to resume from a known sequence number.
-
+            Upsert a test-catalog entry.
         """
         client = self.client
         if aspects is None:
@@ -118,9 +116,9 @@ with `Last-Event-ID` to resume from a known sequence number.
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/runs/{run_id}/events"
+        leaf_template = "/projects/{project_id}/test-catalog"
         path_params = {
-            'run_id': run_id,
+            'project_id': project_id,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -132,12 +130,14 @@ with `Last-Event-ID` to resume from a known sequence number.
 
         resp = client.perform_call(
             leaf=call_leaf,
-            method="GET",
+            method="POST",
             params=query_params if query_params else None,
-            body=None,
+            body=body,
             exp_status=exp_status,
             headers=header_params if header_params else None,
             context_msg=None,
             aspects=aspects,
         )
-        return resp.json()
+        raw_data = resp.json()
+        rtnobj = Testcatalogentry.from_dict(raw_data)
+        return rtnobj

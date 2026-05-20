@@ -2,24 +2,24 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.me import Mepermissions
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.auth import Logoutrequest
-from automojo.restclient.pychestrate.models.auth import Logoutresponse
 
 
-class AuthApiGroup(RestApiGroup):
+class MeApiGroup(RestApiGroup):
     """
-        Local-credential authentication and session lifecycle.
+        Permissions and identity of the currently-authenticated actor.
     """
 
-    def auth_logout(self, body: Logoutrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Logoutresponse:
+    def me_get_permissions(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Mepermissions:
         """
-            Close the current session.
+            List the current actor's effective permissions.
             
-            Close the session named in the request body. Returns
-`{session_id, status: "closed"}` on success.
+            Returns the set of permission keys granted to the calling actor by
+the RBAC evaluator, plus the actor's user_id and a list of role
+bindings.
 
         """
         client = self.client
@@ -30,7 +30,7 @@ class AuthApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/auth/logout"
+        call_leaf = "/me/permissions"
 
         query_params = None
 
@@ -40,14 +40,14 @@ class AuthApiGroup(RestApiGroup):
 
         resp = client.perform_call(
             leaf=call_leaf,
-            method="POST",
+            method="GET",
             params=query_params if query_params else None,
-            body=body,
+            body=None,
             exp_status=exp_status,
             headers=header_params if header_params else None,
             context_msg=None,
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Logoutresponse.from_dict(raw_data)
+        rtnobj = Mepermissions.from_dict(raw_data)
         return rtnobj

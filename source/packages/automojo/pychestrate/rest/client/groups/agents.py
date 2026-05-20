@@ -2,13 +2,13 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.agents import Agentrollout
+from automojo.pychestrate.rest.client.models.agents import Agentrolloutcreaterequest
+from automojo.pychestrate.rest.client.models.agents import Clientcapabilities
+from automojo.pychestrate.rest.client.models.agents import Clientinventory
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.agents import Agentrollout
-from automojo.restclient.pychestrate.models.agents import Agentrolloutcreaterequest
-from automojo.restclient.pychestrate.models.agents import Clientcapabilities
-from automojo.restclient.pychestrate.models.agents import Clientinventory
 
 
 class AgentsApiGroup(RestApiGroup):

@@ -2,56 +2,22 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.variables import Variable
+from automojo.pychestrate.rest.client.models.variables import Variableeffectiveset
+from automojo.pychestrate.rest.client.models.variables import Variableupsertrequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.rbac import Rbaccheckrequest
-from automojo.restclient.pychestrate.models.rbac import Rbaccheckresponse
-from automojo.restclient.pychestrate.models.rbac import Rbacrolebindingcreaterequest
 
 
-class RbacApiGroup(RestApiGroup):
+class VariablesApiGroup(RestApiGroup):
     """
-        Roles, permissions, role bindings, and permission checks.
+        Hierarchical typed configuration variables.
     """
 
-    def rbac_check_permission(self, body: Rbaccheckrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Rbaccheckresponse:
+    def variables_delete_one(self, scope: str, scope_id: str, name: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Check whether the actor has a permission in a scope.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        call_leaf = "/rbac/check"
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="POST",
-            params=query_params if query_params else None,
-            body=body,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        rtnobj = Rbaccheckresponse.from_dict(raw_data)
-        return rtnobj
-
-    def rbac_create_binding(self, body: Rbacrolebindingcreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
-        """
-            Create a role binding.
+            Delete one variable at a specific scope.
         """
         client = self.client
         if aspects is None:
@@ -61,41 +27,11 @@ class RbacApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/rbac/bindings"
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [201]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="POST",
-            params=query_params if query_params else None,
-            body=body,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        return resp.json()
-
-    def rbac_delete_binding(self, binding_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
-        """
-            Delete a role binding.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        leaf_template = "/rbac/bindings/{binding_id}"
+        leaf_template = "/variables/{scope}/{scope_id}/{name}"
         path_params = {
-            'binding_id': binding_id,
+            'scope': scope,
+            'scope_id': scope_id,
+            'name': name,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -117,9 +53,9 @@ class RbacApiGroup(RestApiGroup):
         )
         return resp.json()
 
-    def rbac_list_bindings(self, *, user_id: Optional[str] = None, project_id: Optional[str] = None, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def variables_get_effective(self, *, project_id: Optional[str] = None, pod_id: Optional[str] = None, run_id: Optional[str] = None, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Variableeffectiveset:
         """
-            List role bindings.
+            Resolve effective variable values for a project / pod / run scope.
         """
         client = self.client
         if aspects is None:
@@ -129,13 +65,15 @@ class RbacApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/rbac/bindings"
+        call_leaf = "/variables/effective"
 
         query_params = {}
-        if user_id is not None:
-            query_params['user_id'] = user_id
         if project_id is not None:
             query_params['project_id'] = project_id
+        if pod_id is not None:
+            query_params['pod_id'] = pod_id
+        if run_id is not None:
+            query_params['run_id'] = run_id
 
 
         if exp_status is None:
@@ -152,11 +90,12 @@ class RbacApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        return self._parse_item(raw_data, Dict[str, Any])
+        rtnobj = Variableeffectiveset.from_dict(raw_data)
+        return rtnobj
 
-    def rbac_list_permissions(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def variables_get_one(self, scope: str, scope_id: str, name: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Variable:
         """
-            List declared RBAC permission keys.
+            Read one variable at a specific scope.
         """
         client = self.client
         if aspects is None:
@@ -166,7 +105,52 @@ class RbacApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/rbac/permissions"
+        leaf_template = "/variables/{scope}/{scope_id}/{name}"
+        path_params = {
+            'scope': scope,
+            'scope_id': scope_id,
+            'name': name,
+        }
+        call_leaf = leaf_template.format(**path_params)
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [200]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="GET",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        raw_data = resp.json()
+        rtnobj = Variable.from_dict(raw_data)
+        return rtnobj
+
+    def variables_list_scope(self, scope: str, scope_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+        """
+            List variables declared at a specific scope.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/variables/{scope}/{scope_id}"
+        path_params = {
+            'scope': scope,
+            'scope_id': scope_id,
+        }
+        call_leaf = leaf_template.format(**path_params)
 
         query_params = None
 
@@ -187,9 +171,9 @@ class RbacApiGroup(RestApiGroup):
         raw_data = resp.json()
         return self._parse_item(raw_data, Dict[str, Any])
 
-    def rbac_list_roles(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def variables_put_one(self, scope: str, scope_id: str, name: str, body: Variableupsertrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Variable:
         """
-            List declared roles.
+            Upsert one variable at a specific scope.
         """
         client = self.client
         if aspects is None:
@@ -199,7 +183,13 @@ class RbacApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/rbac/roles"
+        leaf_template = "/variables/{scope}/{scope_id}/{name}"
+        path_params = {
+            'scope': scope,
+            'scope_id': scope_id,
+            'name': name,
+        }
+        call_leaf = leaf_template.format(**path_params)
 
         query_params = None
 
@@ -209,13 +199,14 @@ class RbacApiGroup(RestApiGroup):
 
         resp = client.perform_call(
             leaf=call_leaf,
-            method="GET",
+            method="PUT",
             params=query_params if query_params else None,
-            body=None,
+            body=body,
             exp_status=exp_status,
             headers=header_params if header_params else None,
             context_msg=None,
             aspects=aspects,
         )
         raw_data = resp.json()
-        return self._parse_item(raw_data, Dict[str, Any])
+        rtnobj = Variable.from_dict(raw_data)
+        return rtnobj

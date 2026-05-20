@@ -2,20 +2,21 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.artifacts import Artifactentry
+from automojo.pychestrate.rest.client.models.artifacts import Artifactentrypage
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.audit import Auditrecord
 
 
-class AuditApiGroup(RestApiGroup):
+class ArtifactsApiGroup(RestApiGroup):
     """
-        Append-only audit log access.
+        Artifact listings and browsing for a run.
     """
 
-    def audit_get_by_sequence(self, sequence_number: int, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Auditrecord:
+    def artifacts_get_entry(self, run_id: str, artifact_path: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Artifactentry:
         """
-            Read a single audit record by sequence number.
+            Read metadata for one artifact entry.
         """
         client = self.client
         if aspects is None:
@@ -25,9 +26,10 @@ class AuditApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/audit/{sequence_number}"
+        leaf_template = "/runs/{run_id}/artifacts/{artifact_path}"
         path_params = {
-            'sequence_number': sequence_number,
+            'run_id': run_id,
+            'artifact_path': artifact_path,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -48,12 +50,12 @@ class AuditApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Auditrecord.from_dict(raw_data)
+        rtnobj = Artifactentry.from_dict(raw_data)
         return rtnobj
 
-    def audit_list(self, *, limit: Optional[int] = 100, after_sequence: Optional[int] = None, actor_id: Optional[str] = None, action: Optional[str] = None, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def artifacts_list_for_run(self, run_id: str, *, prefix: Optional[str] = None, page: Optional[int] = 1, per_page: Optional[int] = 50, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Artifactentrypage:
         """
-            List audit-log records.
+            List artifacts for a run.
         """
         client = self.client
         if aspects is None:
@@ -63,17 +65,19 @@ class AuditApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/audit"
+        leaf_template = "/runs/{run_id}/artifacts"
+        path_params = {
+            'run_id': run_id,
+        }
+        call_leaf = leaf_template.format(**path_params)
 
         query_params = {}
-        if limit is not None:
-            query_params['limit'] = limit
-        if after_sequence is not None:
-            query_params['after_sequence'] = after_sequence
-        if actor_id is not None:
-            query_params['actor_id'] = actor_id
-        if action is not None:
-            query_params['action'] = action
+        if prefix is not None:
+            query_params['prefix'] = prefix
+        if page is not None:
+            query_params['page'] = page
+        if per_page is not None:
+            query_params['per_page'] = per_page
 
 
         if exp_status is None:
@@ -90,4 +94,5 @@ class AuditApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        return self._parse_item(raw_data, Dict[str, Any])
+        rtnobj = Artifactentrypage.from_dict(raw_data)
+        return rtnobj

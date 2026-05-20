@@ -2,24 +2,23 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.projects import Project
+from automojo.pychestrate.rest.client.models.projects import Projectcreaterequest
+from automojo.pychestrate.rest.client.models.projects import Projectmemberaddrequest
+from automojo.pychestrate.rest.client.models.projects import Projectpatchrequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.flags import Featureflag
-from automojo.restclient.pychestrate.models.flags import Featureflagcreaterequest
-from automojo.restclient.pychestrate.models.flags import Featureflagevaluaterequest
-from automojo.restclient.pychestrate.models.flags import Featureflagevaluateresponse
-from automojo.restclient.pychestrate.models.flags import Featureflagupdaterequest
 
 
-class FlagsApiGroup(RestApiGroup):
+class ProjectsApiGroup(RestApiGroup):
     """
-        Feature flags (runtime toggles).
+        Project workspaces — the top-level entity that owns runs, pods, members, repositories, builds, and tests.
     """
 
-    def flags_create(self, body: Featureflagcreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+    def projects_add_member(self, slug: str, body: Projectmemberaddrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Create a new feature flag.
+            Add a member to a project.
         """
         client = self.client
         if aspects is None:
@@ -29,7 +28,11 @@ class FlagsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/flags"
+        leaf_template = "/projects/{slug}/members"
+        path_params = {
+            'slug': slug,
+        }
+        call_leaf = leaf_template.format(**path_params)
 
         query_params = None
 
@@ -49,9 +52,9 @@ class FlagsApiGroup(RestApiGroup):
         )
         return resp.json()
 
-    def flags_evaluate(self, flag_key: str, body: Featureflagevaluaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Featureflagevaluateresponse:
+    def projects_archive(self, slug: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Project:
         """
-            Evaluate a feature flag against an actor / context.
+            Archive a project.
         """
         client = self.client
         if aspects is None:
@@ -61,9 +64,9 @@ class FlagsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/flags/{flag_key}/evaluate"
+        leaf_template = "/projects/{slug}/archive"
         path_params = {
-            'flag_key': flag_key,
+            'slug': slug,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -72,6 +75,40 @@ class FlagsApiGroup(RestApiGroup):
 
         if exp_status is None:
             exp_status = [200]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="POST",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        raw_data = resp.json()
+        rtnobj = Project.from_dict(raw_data)
+        return rtnobj
+
+    def projects_create(self, body: Projectcreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+        """
+            Create a project.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        call_leaf = "/projects"
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [201]
 
         resp = client.perform_call(
             leaf=call_leaf,
@@ -83,13 +120,11 @@ class FlagsApiGroup(RestApiGroup):
             context_msg=None,
             aspects=aspects,
         )
-        raw_data = resp.json()
-        rtnobj = Featureflagevaluateresponse.from_dict(raw_data)
-        return rtnobj
+        return resp.json()
 
-    def flags_get_by_key(self, flag_key: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Featureflag:
+    def projects_delete(self, slug: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Read a feature flag.
+            Delete a project.
         """
         client = self.client
         if aspects is None:
@@ -99,9 +134,45 @@ class FlagsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/flags/{flag_key}"
+        leaf_template = "/projects/{slug}"
         path_params = {
-            'flag_key': flag_key,
+            'slug': slug,
+        }
+        call_leaf = leaf_template.format(**path_params)
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [204]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="DELETE",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        return resp.json()
+
+    def projects_get_by_slug(self, slug: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Project:
+        """
+            Read a project by slug.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/projects/{slug}"
+        path_params = {
+            'slug': slug,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -122,12 +193,12 @@ class FlagsApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Featureflag.from_dict(raw_data)
+        rtnobj = Project.from_dict(raw_data)
         return rtnobj
 
-    def flags_get_history(self, flag_key: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def projects_list_members(self, slug: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
         """
-            Read change history for a feature flag.
+            List project members.
         """
         client = self.client
         if aspects is None:
@@ -137,9 +208,9 @@ class FlagsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/flags/{flag_key}/history"
+        leaf_template = "/projects/{slug}/members"
         path_params = {
-            'flag_key': flag_key,
+            'slug': slug,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -162,42 +233,9 @@ class FlagsApiGroup(RestApiGroup):
         raw_data = resp.json()
         return self._parse_item(raw_data, Dict[str, Any])
 
-    def flags_list(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def projects_patch(self, slug: str, body: Projectpatchrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Project:
         """
-            List feature flags.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        call_leaf = "/flags"
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="GET",
-            params=query_params if query_params else None,
-            body=None,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        return self._parse_item(raw_data, Dict[str, Any])
-
-    def flags_list_backends(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
-        """
-            List installed feature-flag backends.
+            Patch a project.
         """
         client = self.client
         if aspects is None:
@@ -207,80 +245,9 @@ class FlagsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/flags/backends"
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="GET",
-            params=query_params if query_params else None,
-            body=None,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        return self._parse_item(raw_data, Dict[str, Any])
-
-    def flags_retire(self, flag_key: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Featureflag:
-        """
-            Retire a feature flag.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        leaf_template = "/flags/{flag_key}/retire"
+        leaf_template = "/projects/{slug}"
         path_params = {
-            'flag_key': flag_key,
-        }
-        call_leaf = leaf_template.format(**path_params)
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="POST",
-            params=query_params if query_params else None,
-            body=None,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        rtnobj = Featureflag.from_dict(raw_data)
-        return rtnobj
-
-    def flags_update(self, flag_key: str, body: Featureflagupdaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Featureflag:
-        """
-            Update a feature flag.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        leaf_template = "/flags/{flag_key}"
-        path_params = {
-            'flag_key': flag_key,
+            'slug': slug,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -301,5 +268,118 @@ class FlagsApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Featureflag.from_dict(raw_data)
+        rtnobj = Project.from_dict(raw_data)
+        return rtnobj
+
+    def projects_remove_member(self, slug: str, user_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+        """
+            Remove a member's owner binding from the project.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/projects/{slug}/members/{user_id}"
+        path_params = {
+            'slug': slug,
+            'user_id': user_id,
+        }
+        call_leaf = leaf_template.format(**path_params)
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [204]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="DELETE",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        return resp.json()
+
+    def projects_remove_member_role(self, slug: str, user_id: str, role_name: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+        """
+            Remove a specific role binding from a member of the project.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/projects/{slug}/members/{user_id}/{role_name}"
+        path_params = {
+            'slug': slug,
+            'user_id': user_id,
+            'role_name': role_name,
+        }
+        call_leaf = leaf_template.format(**path_params)
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [204]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="DELETE",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        return resp.json()
+
+    def projects_unarchive(self, slug: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Project:
+        """
+            Un-archive a project.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/projects/{slug}/unarchive"
+        path_params = {
+            'slug': slug,
+        }
+        call_leaf = leaf_template.format(**path_params)
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [200]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="POST",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        raw_data = resp.json()
+        rtnobj = Project.from_dict(raw_data)
         return rtnobj

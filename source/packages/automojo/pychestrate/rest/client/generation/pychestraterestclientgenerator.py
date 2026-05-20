@@ -15,7 +15,7 @@ from typing import List
 
 from automojo.restclient.base.restclientgenerator import RestClientGenerator
 
-from automojo.restclient.pychestrate.pychestraterestclientbase import PychestrateRestClientBase
+from automojo.pychestrate.rest.client.pychestraterestclientbase import PychestrateRestClientBase
 
 
 class PychestrateRestClientGenerator(RestClientGenerator):
@@ -31,9 +31,9 @@ class PychestrateRestClientGenerator(RestClientGenerator):
 
     REST_CLIENT_BASE_CLASS = PychestrateRestClientBase
 
-    CLIENT_MODULE_ROOT = "automojo.restclient.pychestrate"
-    SCHEMA_MODULE_ROOT = "automojo.restclient.pychestrate.models"
-    GROUP_MODULE_ROOT = "automojo.restclient.pychestrate.groups"
+    CLIENT_MODULE_ROOT = "automojo.pychestrate.rest.client"
+    SCHEMA_MODULE_ROOT = "automojo.pychestrate.rest.client.models"
+    GROUP_MODULE_ROOT = "automojo.pychestrate.rest.client.groups"
 
     def generate(self):
         """

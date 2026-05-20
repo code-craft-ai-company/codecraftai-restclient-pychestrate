@@ -2,21 +2,21 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.users import User
+from automojo.pychestrate.rest.client.models.users import Usercreaterequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.artifacts import Artifactentry
-from automojo.restclient.pychestrate.models.artifacts import Artifactentrypage
 
 
-class ArtifactsApiGroup(RestApiGroup):
+class UsersApiGroup(RestApiGroup):
     """
-        Artifact listings and browsing for a run.
+        User account administration.
     """
 
-    def artifacts_get_entry(self, run_id: str, artifact_path: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Artifactentry:
+    def users_create(self, body: Usercreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Read metadata for one artifact entry.
+            Create a user account.
         """
         client = self.client
         if aspects is None:
@@ -26,10 +26,41 @@ class ArtifactsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/runs/{run_id}/artifacts/{artifact_path}"
+        call_leaf = "/identity/users"
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [201]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="POST",
+            params=query_params if query_params else None,
+            body=body,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        return resp.json()
+
+    def users_get_by_id(self, user_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> User:
+        """
+            Read a user account.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/identity/users/{user_id}"
         path_params = {
-            'run_id': run_id,
-            'artifact_path': artifact_path,
+            'user_id': user_id,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -50,49 +81,5 @@ class ArtifactsApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Artifactentry.from_dict(raw_data)
-        return rtnobj
-
-    def artifacts_list_for_run(self, run_id: str, *, prefix: Optional[str] = None, page: Optional[int] = 1, per_page: Optional[int] = 50, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Artifactentrypage:
-        """
-            List artifacts for a run.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        leaf_template = "/runs/{run_id}/artifacts"
-        path_params = {
-            'run_id': run_id,
-        }
-        call_leaf = leaf_template.format(**path_params)
-
-        query_params = {}
-        if prefix is not None:
-            query_params['prefix'] = prefix
-        if page is not None:
-            query_params['page'] = page
-        if per_page is not None:
-            query_params['per_page'] = per_page
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="GET",
-            params=query_params if query_params else None,
-            body=None,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        rtnobj = Artifactentrypage.from_dict(raw_data)
+        rtnobj = User.from_dict(raw_data)
         return rtnobj

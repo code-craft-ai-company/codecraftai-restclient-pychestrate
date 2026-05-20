@@ -2,22 +2,20 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.tagging import Tagattachrequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.variables import Variable
-from automojo.restclient.pychestrate.models.variables import Variableeffectiveset
-from automojo.restclient.pychestrate.models.variables import Variableupsertrequest
 
 
-class VariablesApiGroup(RestApiGroup):
+class TaggingApiGroup(RestApiGroup):
     """
-        Hierarchical typed configuration variables.
+        Shared tag model across entities.
     """
 
-    def variables_delete_one(self, scope: str, scope_id: str, name: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+    def tagging_attach(self, entity_kind: str, entity_id: str, body: Tagattachrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Delete one variable at a specific scope.
+            Attach a tag to an entity.
         """
         client = self.client
         if aspects is None:
@@ -27,11 +25,48 @@ class VariablesApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/variables/{scope}/{scope_id}/{name}"
+        leaf_template = "/tags/{entity_kind}/{entity_id}"
         path_params = {
-            'scope': scope,
-            'scope_id': scope_id,
-            'name': name,
+            'entity_kind': entity_kind,
+            'entity_id': entity_id,
+        }
+        call_leaf = leaf_template.format(**path_params)
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [201]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="POST",
+            params=query_params if query_params else None,
+            body=body,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        return resp.json()
+
+    def tagging_detach(self, entity_kind: str, entity_id: str, tag: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+        """
+            Detach a tag from an entity.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        leaf_template = "/tags/{entity_kind}/{entity_id}/{tag}"
+        path_params = {
+            'entity_kind': entity_kind,
+            'entity_id': entity_id,
+            'tag': tag,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -53,49 +88,9 @@ class VariablesApiGroup(RestApiGroup):
         )
         return resp.json()
 
-    def variables_get_effective(self, *, project_id: Optional[str] = None, pod_id: Optional[str] = None, run_id: Optional[str] = None, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Variableeffectiveset:
+    def tagging_list_for_entity(self, entity_kind: str, entity_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
         """
-            Resolve effective variable values for a project / pod / run scope.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        call_leaf = "/variables/effective"
-
-        query_params = {}
-        if project_id is not None:
-            query_params['project_id'] = project_id
-        if pod_id is not None:
-            query_params['pod_id'] = pod_id
-        if run_id is not None:
-            query_params['run_id'] = run_id
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="GET",
-            params=query_params if query_params else None,
-            body=None,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        rtnobj = Variableeffectiveset.from_dict(raw_data)
-        return rtnobj
-
-    def variables_get_one(self, scope: str, scope_id: str, name: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Variable:
-        """
-            Read one variable at a specific scope.
+            List tags attached to an entity.
         """
         client = self.client
         if aspects is None:
@@ -105,50 +100,10 @@ class VariablesApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/variables/{scope}/{scope_id}/{name}"
+        leaf_template = "/tags/{entity_kind}/{entity_id}"
         path_params = {
-            'scope': scope,
-            'scope_id': scope_id,
-            'name': name,
-        }
-        call_leaf = leaf_template.format(**path_params)
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [200]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="GET",
-            params=query_params if query_params else None,
-            body=None,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        raw_data = resp.json()
-        rtnobj = Variable.from_dict(raw_data)
-        return rtnobj
-
-    def variables_list_scope(self, scope: str, scope_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
-        """
-            List variables declared at a specific scope.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        leaf_template = "/variables/{scope}/{scope_id}"
-        path_params = {
-            'scope': scope,
-            'scope_id': scope_id,
+            'entity_kind': entity_kind,
+            'entity_id': entity_id,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -171,9 +126,9 @@ class VariablesApiGroup(RestApiGroup):
         raw_data = resp.json()
         return self._parse_item(raw_data, Dict[str, Any])
 
-    def variables_put_one(self, scope: str, scope_id: str, name: str, body: Variableupsertrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Variable:
+    def tagging_list_taxonomies(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
         """
-            Upsert one variable at a specific scope.
+            List declared tag taxonomies.
         """
         client = self.client
         if aspects is None:
@@ -183,13 +138,7 @@ class VariablesApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/variables/{scope}/{scope_id}/{name}"
-        path_params = {
-            'scope': scope,
-            'scope_id': scope_id,
-            'name': name,
-        }
-        call_leaf = leaf_template.format(**path_params)
+        call_leaf = "/tags/taxonomies"
 
         query_params = None
 
@@ -199,14 +148,50 @@ class VariablesApiGroup(RestApiGroup):
 
         resp = client.perform_call(
             leaf=call_leaf,
-            method="PUT",
+            method="GET",
             params=query_params if query_params else None,
-            body=body,
+            body=None,
             exp_status=exp_status,
             headers=header_params if header_params else None,
             context_msg=None,
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Variable.from_dict(raw_data)
-        return rtnobj
+        return self._parse_item(raw_data, Dict[str, Any])
+
+    def tagging_search(self, *, q: Optional[str] = None, taxonomy: Optional[str] = None, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+        """
+            Search tag definitions.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        call_leaf = "/tags/search"
+
+        query_params = {}
+        if q is not None:
+            query_params['q'] = q
+        if taxonomy is not None:
+            query_params['taxonomy'] = taxonomy
+
+
+        if exp_status is None:
+            exp_status = [200]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="GET",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        raw_data = resp.json()
+        return self._parse_item(raw_data, Dict[str, Any])

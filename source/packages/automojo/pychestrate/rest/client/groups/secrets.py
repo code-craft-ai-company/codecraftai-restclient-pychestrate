@@ -2,20 +2,20 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.secrets import Secretref
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.projecttemplates import Projecttemplate
 
 
-class ProjectTemplatesApiGroup(RestApiGroup):
+class SecretsApiGroup(RestApiGroup):
     """
-        Scaffolded new-project presets.
+        Encrypted-secrets read API (writes are out-of-band today).
     """
 
-    def project_templates_get_by_id(self, template_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Projecttemplate:
+    def secrets_get_by_ref(self, secret_ref: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Secretref:
         """
-            Read a project template.
+            Read a single secret reference (metadata only).
         """
         client = self.client
         if aspects is None:
@@ -25,9 +25,9 @@ class ProjectTemplatesApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/project-templates/{template_id}"
+        leaf_template = "/secrets/{secret_ref}"
         path_params = {
-            'template_id': template_id,
+            'secret_ref': secret_ref,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -48,12 +48,12 @@ class ProjectTemplatesApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Projecttemplate.from_dict(raw_data)
+        rtnobj = Secretref.from_dict(raw_data)
         return rtnobj
 
-    def project_templates_list(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def secrets_list(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
         """
-            List project templates.
+            List secret references (metadata only — no plaintext).
         """
         client = self.client
         if aspects is None:
@@ -63,7 +63,7 @@ class ProjectTemplatesApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/project-templates"
+        call_leaf = "/secrets"
 
         query_params = None
 

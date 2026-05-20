@@ -2,20 +2,20 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.audit import Auditrecord
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.secrets import Secretref
 
 
-class SecretsApiGroup(RestApiGroup):
+class AuditApiGroup(RestApiGroup):
     """
-        Encrypted-secrets read API (writes are out-of-band today).
+        Append-only audit log access.
     """
 
-    def secrets_get_by_ref(self, secret_ref: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Secretref:
+    def audit_get_by_sequence(self, sequence_number: int, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Auditrecord:
         """
-            Read a single secret reference (metadata only).
+            Read a single audit record by sequence number.
         """
         client = self.client
         if aspects is None:
@@ -25,9 +25,9 @@ class SecretsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/secrets/{secret_ref}"
+        leaf_template = "/audit/{sequence_number}"
         path_params = {
-            'secret_ref': secret_ref,
+            'sequence_number': sequence_number,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -48,12 +48,12 @@ class SecretsApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Secretref.from_dict(raw_data)
+        rtnobj = Auditrecord.from_dict(raw_data)
         return rtnobj
 
-    def secrets_list(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def audit_list(self, *, limit: Optional[int] = 100, after_sequence: Optional[int] = None, actor_id: Optional[str] = None, action: Optional[str] = None, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
         """
-            List secret references (metadata only — no plaintext).
+            List audit-log records.
         """
         client = self.client
         if aspects is None:
@@ -63,9 +63,17 @@ class SecretsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/secrets"
+        call_leaf = "/audit"
 
-        query_params = None
+        query_params = {}
+        if limit is not None:
+            query_params['limit'] = limit
+        if after_sequence is not None:
+            query_params['after_sequence'] = after_sequence
+        if actor_id is not None:
+            query_params['actor_id'] = actor_id
+        if action is not None:
+            query_params['action'] = action
 
 
         if exp_status is None:

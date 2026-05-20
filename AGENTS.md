@@ -43,7 +43,7 @@ The OpenAPI specification at
 truth for this client. The `pychestrate-service` repo is the authoritative
 producer of the spec; this repo only consumes it. To regenerate the client
 after a spec change, copy the latest spec into
-`source/packages/automojo/restclient/pychestrate/generation/specs/pychestrate.yaml`
+`source/packages/automojo/pychestrate/rest/client/generation/specs/pychestrate.yaml`
 and run `make generate`.
 
 # Testing Conventions
@@ -56,15 +56,15 @@ The code naming conventions of this repository follow the parent suite's
 naming conventions document (see `automojo-restclient-base`).
 
 # Code Structure
-- `source/packages/automojo/restclient/pychestrate/pychestraterestclient.py` -
+- `source/packages/automojo/pychestrate/rest/client/pychestraterestclient.py` -
   top-level client subclass.
-- `source/packages/automojo/restclient/pychestrate/pychestraterestclientbase.py` -
+- `source/packages/automojo/pychestrate/rest/client/pychestraterestclientbase.py` -
   authentication / credential dispatch (cookie session, API key, mTLS).
-- `source/packages/automojo/restclient/pychestrate/groups/*.py` - generated
+- `source/packages/automojo/pychestrate/rest/client/groups/*.py` - generated
   per-tag endpoint groups.
-- `source/packages/automojo/restclient/pychestrate/models/*.py` - generated
+- `source/packages/automojo/pychestrate/rest/client/models/*.py` - generated
   schema models.
-- `source/packages/automojo/restclient/pychestrate/generation/` - generator
+- `source/packages/automojo/pychestrate/rest/client/generation/` - generator
   driver and the embedded snapshot of the OpenAPI spec.
 
 # Coding Standards

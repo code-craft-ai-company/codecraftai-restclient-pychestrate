@@ -2,13 +2,13 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.client import Client
+from automojo.pychestrate.rest.client.models.enrollment import Enrollmentredeemrequest
+from automojo.pychestrate.rest.client.models.enrollment import Enrollmentredeemresponse
+from automojo.pychestrate.rest.client.models.enrollment import Enrollmenttokencreaterequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.client import Client
-from automojo.restclient.pychestrate.models.enrollment import Enrollmentredeemrequest
-from automojo.restclient.pychestrate.models.enrollment import Enrollmentredeemresponse
-from automojo.restclient.pychestrate.models.enrollment import Enrollmenttokencreaterequest
 
 
 class EnrollmentApiGroup(RestApiGroup):

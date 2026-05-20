@@ -5,33 +5,33 @@ from typing import Optional
 import weakref
 
 from automojo.credentials.basecredential import BaseCredential
+from automojo.pychestrate.rest.client.groups.agents import AgentsApiGroup
+from automojo.pychestrate.rest.client.groups.artifacts import ArtifactsApiGroup
+from automojo.pychestrate.rest.client.groups.audit import AuditApiGroup
+from automojo.pychestrate.rest.client.groups.auth import AuthApiGroup
+from automojo.pychestrate.rest.client.groups.clients import ClientsApiGroup
+from automojo.pychestrate.rest.client.groups.dispatch import DispatchApiGroup
+from automojo.pychestrate.rest.client.groups.enrollment import EnrollmentApiGroup
+from automojo.pychestrate.rest.client.groups.flags import FlagsApiGroup
+from automojo.pychestrate.rest.client.groups.me import MeApiGroup
+from automojo.pychestrate.rest.client.groups.notifications import NotificationsApiGroup
+from automojo.pychestrate.rest.client.groups.pluginapi import PluginApiApiGroup
+from automojo.pychestrate.rest.client.groups.pods import PodsApiGroup
+from automojo.pychestrate.rest.client.groups.progress import ProgressApiGroup
+from automojo.pychestrate.rest.client.groups.projects import ProjectsApiGroup
+from automojo.pychestrate.rest.client.groups.projecttemplates import ProjectTemplatesApiGroup
+from automojo.pychestrate.rest.client.groups.rbac import RbacApiGroup
+from automojo.pychestrate.rest.client.groups.results import ResultsApiGroup
+from automojo.pychestrate.rest.client.groups.retention import RetentionApiGroup
+from automojo.pychestrate.rest.client.groups.runs import RunsApiGroup
+from automojo.pychestrate.rest.client.groups.secrets import SecretsApiGroup
+from automojo.pychestrate.rest.client.groups.tagging import TaggingApiGroup
+from automojo.pychestrate.rest.client.groups.testcatalog import TestCatalogApiGroup
+from automojo.pychestrate.rest.client.groups.testruns import TestRunsApiGroup
+from automojo.pychestrate.rest.client.groups.users import UsersApiGroup
+from automojo.pychestrate.rest.client.groups.variables import VariablesApiGroup
+from automojo.pychestrate.rest.client.pychestraterestclientbase import PychestrateRestClientBase
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
-from automojo.restclient.pychestrate.groups.agents import AgentsApiGroup
-from automojo.restclient.pychestrate.groups.artifacts import ArtifactsApiGroup
-from automojo.restclient.pychestrate.groups.audit import AuditApiGroup
-from automojo.restclient.pychestrate.groups.auth import AuthApiGroup
-from automojo.restclient.pychestrate.groups.clients import ClientsApiGroup
-from automojo.restclient.pychestrate.groups.dispatch import DispatchApiGroup
-from automojo.restclient.pychestrate.groups.enrollment import EnrollmentApiGroup
-from automojo.restclient.pychestrate.groups.flags import FlagsApiGroup
-from automojo.restclient.pychestrate.groups.me import MeApiGroup
-from automojo.restclient.pychestrate.groups.notifications import NotificationsApiGroup
-from automojo.restclient.pychestrate.groups.pluginapi import PluginApiApiGroup
-from automojo.restclient.pychestrate.groups.pods import PodsApiGroup
-from automojo.restclient.pychestrate.groups.progress import ProgressApiGroup
-from automojo.restclient.pychestrate.groups.projects import ProjectsApiGroup
-from automojo.restclient.pychestrate.groups.projecttemplates import ProjectTemplatesApiGroup
-from automojo.restclient.pychestrate.groups.rbac import RbacApiGroup
-from automojo.restclient.pychestrate.groups.results import ResultsApiGroup
-from automojo.restclient.pychestrate.groups.retention import RetentionApiGroup
-from automojo.restclient.pychestrate.groups.runs import RunsApiGroup
-from automojo.restclient.pychestrate.groups.secrets import SecretsApiGroup
-from automojo.restclient.pychestrate.groups.tagging import TaggingApiGroup
-from automojo.restclient.pychestrate.groups.testcatalog import TestCatalogApiGroup
-from automojo.restclient.pychestrate.groups.testruns import TestRunsApiGroup
-from automojo.restclient.pychestrate.groups.users import UsersApiGroup
-from automojo.restclient.pychestrate.groups.variables import VariablesApiGroup
-from automojo.restclient.pychestrate.pychestraterestclientbase import PychestrateRestClientBase
 
 
 class PychestrateRestClient(PychestrateRestClientBase):

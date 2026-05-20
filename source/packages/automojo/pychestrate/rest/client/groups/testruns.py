@@ -2,24 +2,24 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.testruns import Testruncreaterequest
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.me import Mepermissions
 
 
-class MeApiGroup(RestApiGroup):
+class TestRunsApiGroup(RestApiGroup):
     """
-        Permissions and identity of the currently-authenticated actor.
+        Trigger a new test run on a project + pod.
     """
 
-    def me_get_permissions(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Mepermissions:
+    def test_runs_trigger(self, project_id: str, body: Testruncreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            List the current actor's effective permissions.
+            Trigger a new test run on a project.
             
-            Returns the set of permission keys granted to the calling actor by
-the RBAC evaluator, plus the actor's user_id and a list of role
-bindings.
+            Creates a new run from a catalog entry and a pod selector.
+Returns the freshly-created run in `PENDING` state; the
+dispatcher transitions it to `DISPATCHING` asynchronously.
 
         """
         client = self.client
@@ -30,24 +30,26 @@ bindings.
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/me/permissions"
+        leaf_template = "/projects/{project_id}/test-runs"
+        path_params = {
+            'project_id': project_id,
+        }
+        call_leaf = leaf_template.format(**path_params)
 
         query_params = None
 
 
         if exp_status is None:
-            exp_status = [200]
+            exp_status = [202]
 
         resp = client.perform_call(
             leaf=call_leaf,
-            method="GET",
+            method="POST",
             params=query_params if query_params else None,
-            body=None,
+            body=body,
             exp_status=exp_status,
             headers=header_params if header_params else None,
             context_msg=None,
             aspects=aspects,
         )
-        raw_data = resp.json()
-        rtnobj = Mepermissions.from_dict(raw_data)
-        return rtnobj
+        return resp.json()

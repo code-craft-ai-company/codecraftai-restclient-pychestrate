@@ -2,24 +2,26 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.dispatch import Dispatchack
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.testruns import Testruncreaterequest
 
 
-class TestRunsApiGroup(RestApiGroup):
+class DispatchApiGroup(RestApiGroup):
     """
-        Trigger a new test run on a project + pod.
+        Pod-client → server dispatch acknowledgements.
     """
 
-    def test_runs_trigger(self, project_id: str, body: Testruncreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+    def dispatch_ack_run(self, run_id: str, body: Dispatchack, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
         """
-            Trigger a new test run on a project.
+            Client agent acknowledges receipt of a dispatched envelope.
             
-            Creates a new run from a catalog entry and a pod selector.
-Returns the freshly-created run in `PENDING` state; the
-dispatcher transitions it to `DISPATCHING` asynchronously.
+            Posted by the pod client agent over mTLS after it has accepted
+a dispatch and minted a local run identifier. Signals that the
+envelope was received and is being prepared for execution; the
+server transitions the run's state from `DISPATCHING` to
+`DISPATCHED` on success.
 
         """
         client = self.client
@@ -30,9 +32,9 @@ dispatcher transitions it to `DISPATCHING` asynchronously.
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/projects/{project_id}/test-runs"
+        leaf_template = "/runs/{run_id}/dispatch-ack"
         path_params = {
-            'project_id': project_id,
+            'run_id': run_id,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -40,7 +42,7 @@ dispatcher transitions it to `DISPATCHING` asynchronously.
 
 
         if exp_status is None:
-            exp_status = [202]
+            exp_status = [204]
 
         resp = client.perform_call(
             leaf=call_leaf,

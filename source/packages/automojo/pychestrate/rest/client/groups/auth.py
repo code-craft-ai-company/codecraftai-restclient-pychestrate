@@ -2,26 +2,24 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.auth import Logoutrequest
+from automojo.pychestrate.rest.client.models.auth import Logoutresponse
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.dispatch import Dispatchack
 
 
-class DispatchApiGroup(RestApiGroup):
+class AuthApiGroup(RestApiGroup):
     """
-        Pod-client → server dispatch acknowledgements.
+        Local-credential authentication and session lifecycle.
     """
 
-    def dispatch_ack_run(self, run_id: str, body: Dispatchack, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+    def auth_logout(self, body: Logoutrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Logoutresponse:
         """
-            Client agent acknowledges receipt of a dispatched envelope.
+            Close the current session.
             
-            Posted by the pod client agent over mTLS after it has accepted
-a dispatch and minted a local run identifier. Signals that the
-envelope was received and is being prepared for execution; the
-server transitions the run's state from `DISPATCHING` to
-`DISPATCHED` on success.
+            Close the session named in the request body. Returns
+`{session_id, status: "closed"}` on success.
 
         """
         client = self.client
@@ -32,17 +30,13 @@ server transitions the run's state from `DISPATCHING` to
         if headers is not None:
             header_params = headers
 
-        leaf_template = "/runs/{run_id}/dispatch-ack"
-        path_params = {
-            'run_id': run_id,
-        }
-        call_leaf = leaf_template.format(**path_params)
+        call_leaf = "/auth/logout"
 
         query_params = None
 
 
         if exp_status is None:
-            exp_status = [204]
+            exp_status = [200]
 
         resp = client.perform_call(
             leaf=call_leaf,
@@ -54,4 +48,6 @@ server transitions the run's state from `DISPATCHING` to
             context_msg=None,
             aspects=aspects,
         )
-        return resp.json()
+        raw_data = resp.json()
+        rtnobj = Logoutresponse.from_dict(raw_data)
+        return rtnobj

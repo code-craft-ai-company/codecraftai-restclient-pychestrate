@@ -2,21 +2,20 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.pluginapi import Pluginapiprotocol
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.notifications import Notificationchannel
-from automojo.restclient.pychestrate.models.notifications import Notificationchannelcreaterequest
 
 
-class NotificationsApiGroup(RestApiGroup):
+class PluginApiApiGroup(RestApiGroup):
     """
-        Notification channels (email, Slack, webhook, ...).
+        Plugin-API catalog metadata for installed extensions.
     """
 
-    def notifications_create_channel(self, body: Notificationchannelcreaterequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:
+    def plugin_api_get_protocol(self, protocol_name: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Pluginapiprotocol:
         """
-            Create a notification channel.
+            Read one plugin-API protocol's metadata.
         """
         client = self.client
         if aspects is None:
@@ -26,41 +25,9 @@ class NotificationsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/notifications/channels"
-
-        query_params = None
-
-
-        if exp_status is None:
-            exp_status = [201]
-
-        resp = client.perform_call(
-            leaf=call_leaf,
-            method="POST",
-            params=query_params if query_params else None,
-            body=body,
-            exp_status=exp_status,
-            headers=header_params if header_params else None,
-            context_msg=None,
-            aspects=aspects,
-        )
-        return resp.json()
-
-    def notifications_get_channel(self, channel_id: str, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Notificationchannel:
-        """
-            Read a notification channel.
-        """
-        client = self.client
-        if aspects is None:
-            aspects = client.aspects
-
-        header_params = client.headers
-        if headers is not None:
-            header_params = headers
-
-        leaf_template = "/notifications/channels/{channel_id}"
+        leaf_template = "/plugin-api/_meta/catalog/{protocol_name}"
         path_params = {
-            'channel_id': channel_id,
+            'protocol_name': protocol_name,
         }
         call_leaf = leaf_template.format(**path_params)
 
@@ -81,12 +48,12 @@ class NotificationsApiGroup(RestApiGroup):
             aspects=aspects,
         )
         raw_data = resp.json()
-        rtnobj = Notificationchannel.from_dict(raw_data)
+        rtnobj = Pluginapiprotocol.from_dict(raw_data)
         return rtnobj
 
-    def notifications_list_channels(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+    def plugin_api_list_catalog(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
         """
-            List notification channels.
+            List the plugin-API protocol catalog.
         """
         client = self.client
         if aspects is None:
@@ -96,7 +63,40 @@ class NotificationsApiGroup(RestApiGroup):
         if headers is not None:
             header_params = headers
 
-        call_leaf = "/notifications/channels"
+        call_leaf = "/plugin-api/_meta/catalog"
+
+        query_params = None
+
+
+        if exp_status is None:
+            exp_status = [200]
+
+        resp = client.perform_call(
+            leaf=call_leaf,
+            method="GET",
+            params=query_params if query_params else None,
+            body=None,
+            exp_status=exp_status,
+            headers=header_params if header_params else None,
+            context_msg=None,
+            aspects=aspects,
+        )
+        raw_data = resp.json()
+        return self._parse_item(raw_data, Dict[str, Any])
+
+    def plugin_api_list_mounts(self, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Dict[str, Any]:
+        """
+            List extension mounts.
+        """
+        client = self.client
+        if aspects is None:
+            aspects = client.aspects
+
+        header_params = client.headers
+        if headers is not None:
+            header_params = headers
+
+        call_leaf = "/plugin-api/_meta/mounts"
 
         query_params = None
 

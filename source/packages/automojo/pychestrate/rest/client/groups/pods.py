@@ -2,17 +2,17 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from automojo.pychestrate.rest.client.models.pods import Poddefinition
+from automojo.pychestrate.rest.client.models.pods import Poddefinitioncreaterequest
+from automojo.pychestrate.rest.client.models.pods import Podregistration
+from automojo.pychestrate.rest.client.models.pods import Podstate
+from automojo.pychestrate.rest.client.models.pods import Podtemplate
+from automojo.pychestrate.rest.client.models.pods import Podtemplatecreaterequest
+from automojo.pychestrate.rest.client.models.pods import Podtemplatematerializerequest
+from automojo.pychestrate.rest.client.models.pods import Podtopology
 from automojo.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from automojo.restclient.base.pagedlist import PagedList
 from automojo.restclient.base.restapigroup import RestApiGroup
-from automojo.restclient.pychestrate.models.pods import Poddefinition
-from automojo.restclient.pychestrate.models.pods import Poddefinitioncreaterequest
-from automojo.restclient.pychestrate.models.pods import Podregistration
-from automojo.restclient.pychestrate.models.pods import Podstate
-from automojo.restclient.pychestrate.models.pods import Podtemplate
-from automojo.restclient.pychestrate.models.pods import Podtemplatecreaterequest
-from automojo.restclient.pychestrate.models.pods import Podtemplatematerializerequest
-from automojo.restclient.pychestrate.models.pods import Podtopology
 
 
 class PodsApiGroup(RestApiGroup):
