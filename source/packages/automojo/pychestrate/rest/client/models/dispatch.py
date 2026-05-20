@@ -20,3 +20,7 @@ to confirm receipt of a dispatched envelope.
     local_run_id = Field(str, required=True, description="Local identifier minted by the client agent for reconciliation.")
     accepted_at = Field(str, required=True)
     notes = Field(str)
+
+
+class Signingkeyset(SchemaObject):
+    keys = Field(List["Signingkey"], required=True)

@@ -8,6 +8,27 @@ from automojo.restclient.base.schemafield import Field
 from automojo.restclient.base.schemaobject import SchemaObject
 
 
+class Artifactpresignrequest(SchemaObject):
+    """
+        Body of `POST /runs/{run_id}/artifacts:presign`. Carries the
+relative artifact paths the agent discovered while walking
+its result tree and wants presigned upload URLs for.
+
+    """
+    paths = Field(List[str], required=True, description="Relative artifact paths (relative to the run's result root). Must be non-empty; the server caps the count and the summed path length and rejects an over-cap batch with 422. ")
+
+
+class Artifactpresignresponse(SchemaObject):
+    """
+        Body of a successful `POST /runs/{run_id}/artifacts:presign`.
+Carries one upload target per requested path, in request
+order.
+
+    """
+    run_id = Field(str, required=True)
+    uploads = Field(List["Artifactuploadtarget"], required=True)
+
+
 class Resultmanifest(SchemaObject):
     """
         Body of `POST /runs/{run_id}/results/complete`. Signals that

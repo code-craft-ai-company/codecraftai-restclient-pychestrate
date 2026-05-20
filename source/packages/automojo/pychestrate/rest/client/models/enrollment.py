@@ -20,6 +20,7 @@ class Enrollmentredeemresponse(SchemaObject):
     client_certificate_pem = Field(str, required=True)
     ca_chain_pem = Field(str, required=True)
     not_after = Field(str)
+    envelope_signing_keys = Field(List["Signingkey"], description="The JWKS-style Ed25519 public-key set the service signs job envelopes with, bundled here so a freshly-enrolled client can verify signed envelopes without an extra call to `GET /envelope-signing-keys`. Empty when no signing key is provisioned; the client should refresh via the dedicated endpoint in that case. ")
 
 
 class Enrollmenttoken(SchemaObject):
