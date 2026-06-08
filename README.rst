@@ -1,13 +1,13 @@
 ==================================================
-Automation Mojo RestClient Pychestrate
+Code Craft AI RestClient Pychestrate
 ==================================================
 
-The ``automojo-restclient-pychestrate`` package is the typed Python REST
+The ``codecraftai-restclient-pychestrate`` package is the typed Python REST
 client for the Pychestrate continuous integration and orchestration
 service. It is auto-generated from the OpenAPI 3.1 contract published
 by ``pychestrate-service`` at
 ``specs/openapi/pychestrate.yaml`` and is built on top of
-``automojo-restclient-base``.
+``codecraftai-restclient-base``.
 
 Highlights
 ==========
@@ -21,7 +21,7 @@ Highlights
 - ``PychestrateRestClientGenerator`` under ``pychestrate/generation/`` to
   regenerate schema and group modules from the OpenAPI specification.
 - Authentication via cookie session, API key header, and mTLS material — wired
-  through ``automojo-credentials``.
+  through ``codecraftai-credentials``.
 
 Source of Truth
 ===============

@@ -8,7 +8,7 @@ test:
 	PYTHONPATH=source/packages .venv/bin/python -m unittest discover -s source/testroots/testbase/tests -v
 
 generate:
-	PYTHONPATH=source/packages .venv/bin/python -m automojo.pychestrate.rest.client.generation.pychestraterestclientgenerator
+	PYTHONPATH=source/packages .venv/bin/python -m ccai.pychestrate.rest.client.generation.pychestraterestclientgenerator
 
 dist-clean:
 	rm -fr dist
