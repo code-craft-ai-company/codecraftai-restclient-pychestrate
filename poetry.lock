@@ -132,7 +132,7 @@ codecraftai-errors = {git = "https://github.com/automationmojo/codecraftai-error
 type = "git"
 url = "https://github.com/automationmojo/codecraftai-credentials.git"
 reference = "main"
-resolved_reference = "6dbbf6f2a6a7f4b375779338f3a07fc8c79bfd41"
+resolved_reference = "8289d574fa6a8bb4293d58188a8fe3e7cb367cd1"
 
 [[package]]
 name = "codecraftai-errors"
