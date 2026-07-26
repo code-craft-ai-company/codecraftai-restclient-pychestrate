@@ -132,7 +132,7 @@ codecraftai-errors = {git = "https://github.com/automationmojo/codecraftai-error
 type = "git"
 url = "https://github.com/automationmojo/codecraftai-credentials.git"
 reference = "main"
-resolved_reference = "9590e4e28c611c826232c469ddc53876ee2bab2b"
+resolved_reference = "72b2e1b570e7887a999d8038e894d5a561b89257"
 
 [[package]]
 name = "codecraftai-errors"
@@ -160,11 +160,14 @@ groups = ["main"]
 files = []
 develop = false
 
+[package.dependencies]
+codecraftai-errors = {git = "https://github.com/automationmojo/codecraftai-errors.git", branch = "main"}
+
 [package.source]
 type = "git"
 url = "https://github.com/automationmojo/codecraftai-interfaces.git"
 reference = "main"
-resolved_reference = "d2a82b380316a13fd43430226bd2a0785332e6a7"
+resolved_reference = "6e332363c9047647f57d14d327b7e015a2bb2b5f"
 
 [[package]]
 name = "codecraftai-restclient-base"
@@ -187,7 +190,7 @@ requests = "^2.32.5"
 type = "git"
 url = "https://github.com/automationmojo/codecraftai-restclient-base.git"
 reference = "main"
-resolved_reference = "9604e527c469ad43d445c96f55a835c03ea7c085"
+resolved_reference = "83753ff0df35b09d3f5cb998ffe096e1c7be39a6"
 
 [[package]]
 name = "idna"
