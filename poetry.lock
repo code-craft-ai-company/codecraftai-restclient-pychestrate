@@ -2,14 +2,14 @@
 
 [[package]]
 name = "certifi"
-version = "2026.6.17"
+version = "2026.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "certifi-2026.6.17-py3-none-any.whl", hash = "sha256:2227dcbaafe0d2f59279d1762ddddc37783ed4354594f194ffc31d20f41fc3db"},
-    {file = "certifi-2026.6.17.tar.gz", hash = "sha256:024c88eeec92ca068db80f02b8b07c9cef7b9fe261d1d535abfd5abd6f6af432"},
+    {file = "certifi-2026.7.22-py3-none-any.whl", hash = "sha256:62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775"},
+    {file = "certifi-2026.7.22.tar.gz", hash = "sha256:741e2c3b351ddf169a738da9f2c048608ff7f2c5cc02f1ebc6b118bb090d5d55"},
 ]
 
 [[package]]
@@ -132,7 +132,7 @@ codecraftai-errors = {git = "https://github.com/automationmojo/codecraftai-error
 type = "git"
 url = "https://github.com/automationmojo/codecraftai-credentials.git"
 reference = "main"
-resolved_reference = "8289d574fa6a8bb4293d58188a8fe3e7cb367cd1"
+resolved_reference = "9590e4e28c611c826232c469ddc53876ee2bab2b"
 
 [[package]]
 name = "codecraftai-errors"
@@ -187,7 +187,7 @@ requests = "^2.32.5"
 type = "git"
 url = "https://github.com/automationmojo/codecraftai-restclient-base.git"
 reference = "main"
-resolved_reference = "7d52f50e190840d85f6f356343db4c236488a716"
+resolved_reference = "9604e527c469ad43d445c96f55a835c03ea7c085"
 
 [[package]]
 name = "idna"
