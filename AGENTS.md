@@ -50,6 +50,9 @@ and run `make generate`.
 This repository utilizes the 'testbase' test framework when wired up; the
 initial smoke tests are written as plain `unittest` tests so they can be run
 without external orchestration.
+Tests live under 'source/testroots/testbase/tests' — note this repository does
+not use the 'ccai' namespace under its testroot, unlike the venue restclients.
+
 
 # Code Naming Conventions
 The code naming conventions of this repository follow the parent suite's
