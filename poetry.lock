@@ -126,13 +126,13 @@ files = []
 develop = false
 
 [package.dependencies]
-codecraftai-errors = {git = "https://github.com/automationmojo/codecraftai-errors.git", branch = "main"}
+codecraftai-errors = {git = "https://github.com/code-craft-ai-company/codecraftai-errors.git", branch = "main"}
 
 [package.source]
 type = "git"
-url = "https://github.com/automationmojo/codecraftai-credentials.git"
+url = "https://github.com/code-craft-ai-company/codecraftai-credentials.git"
 reference = "main"
-resolved_reference = "f15214cc3972b562d53f77bd15381782fee0f5c3"
+resolved_reference = "3992c96eb1d126cbd6370996f6748ad188c30efe"
 
 [[package]]
 name = "codecraftai-errors"
@@ -146,7 +146,7 @@ develop = false
 
 [package.source]
 type = "git"
-url = "https://github.com/automationmojo/codecraftai-errors.git"
+url = "https://github.com/code-craft-ai-company/codecraftai-errors.git"
 reference = "main"
 resolved_reference = "bbc01a9b9e7602c225ffab0716bc6e56b472e4b4"
 
@@ -161,13 +161,13 @@ files = []
 develop = false
 
 [package.dependencies]
-codecraftai-errors = {git = "https://github.com/automationmojo/codecraftai-errors.git", branch = "main"}
+codecraftai-errors = {git = "https://github.com/code-craft-ai-company/codecraftai-errors.git", branch = "main"}
 
 [package.source]
 type = "git"
-url = "https://github.com/automationmojo/codecraftai-interfaces.git"
+url = "https://github.com/code-craft-ai-company/codecraftai-interfaces.git"
 reference = "main"
-resolved_reference = "4b86d4488e7a502c56947ff94f798a01a0fa829a"
+resolved_reference = "fb4b5d4206109ec14d3dcda9e11a2208b312c9e2"
 
 [[package]]
 name = "codecraftai-restclient-base"
@@ -180,17 +180,17 @@ files = []
 develop = false
 
 [package.dependencies]
-codecraftai-credentials = {git = "https://github.com/automationmojo/codecraftai-credentials.git", branch = "main"}
-codecraftai-errors = {git = "https://github.com/automationmojo/codecraftai-errors.git", branch = "main"}
-codecraftai-interfaces = {git = "https://github.com/automationmojo/codecraftai-interfaces.git", branch = "main"}
+codecraftai-credentials = {git = "https://github.com/code-craft-ai-company/codecraftai-credentials.git", branch = "main"}
+codecraftai-errors = {git = "https://github.com/code-craft-ai-company/codecraftai-errors.git", branch = "main"}
+codecraftai-interfaces = {git = "https://github.com/code-craft-ai-company/codecraftai-interfaces.git", branch = "main"}
 pyyaml = "^6.0.3"
 requests = "^2.32.5"
 
 [package.source]
 type = "git"
-url = "https://github.com/automationmojo/codecraftai-restclient-base.git"
+url = "https://github.com/code-craft-ai-company/codecraftai-restclient-base.git"
 reference = "main"
-resolved_reference = "063a8d9b7333865a749b526b3b3eea5d01cf6a11"
+resolved_reference = "1933cbb81beea110a90e37203ddd11601d6dc7e2"
 
 [[package]]
 name = "idna"
@@ -333,4 +333,4 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "7d6619042479d068cb1cf8aa0c2513039aa177416d91148dcb48dfae23318989"
+content-hash = "27130bc0c7fd99091d8353b06f01cc8a60e15ae997f95d2c1e37439b61521c7c"
