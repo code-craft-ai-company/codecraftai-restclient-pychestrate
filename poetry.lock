@@ -195,6 +195,27 @@ files = [
 ]
 
 [[package]]
+name = "codecraftai-arcli"
+version = "1.0.0"
+description = "Advanced Re-Usable Commandline Interface Framework"
+optional = false
+python-versions = ">=3.10,<4.0"
+groups = ["dev"]
+files = [
+    {file = "codecraftai_arcli-1.0.0-py3-none-any.whl", hash = "sha256:8606fb7b376b55eea93523aab18f273bbe8816b88a0a4c2174d0041115942f84"},
+    {file = "codecraftai_arcli-1.0.0.tar.gz", hash = "sha256:55dcfcef40eb2443ef209f5faca4cd1610b07a4c4d51e0e534c3eac9cc665e06"},
+]
+
+[package.dependencies]
+codecraftai-errors = "<2.0.0"
+pyyaml = ">=6.0.2,<7.0.0"
+
+[package.source]
+type = "legacy"
+url = "https://code-craft.ai/licensed-repository/simple"
+reference = "codecraftai"
+
+[[package]]
 name = "codecraftai-credentials"
 version = "1.0.0"
 description = "Code Craft AI - Credentials Package"
@@ -220,10 +241,27 @@ version = "1.0.0"
 description = "Code Craft AI - Errors"
 optional = false
 python-versions = ">=3.10,<4.0"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "codecraftai_errors-1.0.0-py3-none-any.whl", hash = "sha256:6fa27c28e7e9eae33fde10d6ebc0c1e9f600bfafd124b3f199de6db5f587d18c"},
     {file = "codecraftai_errors-1.0.0.tar.gz", hash = "sha256:45c6a526741e0920b356e796fd3379656d4b5dd018c58c02676783f4dcc4096d"},
+]
+
+[package.source]
+type = "legacy"
+url = "https://code-craft.ai/licensed-repository/simple"
+reference = "codecraftai"
+
+[[package]]
+name = "codecraftai-extension"
+version = "1.0.0"
+description = "Code Craft AI - Extension Package"
+optional = false
+python-versions = ">=3.10,<4.0"
+groups = ["dev"]
+files = [
+    {file = "codecraftai_extension-1.0.0-py3-none-any.whl", hash = "sha256:f7dc4b9fe4fc517ea10c22741cb43c84637c2fab61b7efd62246df6bae94e76a"},
+    {file = "codecraftai_extension-1.0.0.tar.gz", hash = "sha256:8d9b4972a75c9e87a3c6fa48d14694feaeae6dacebbd2244ae35f3ccde5a586b"},
 ]
 
 [package.source]
@@ -237,7 +275,7 @@ version = "1.0.0"
 description = "Code Craft AI - Interfaces Package"
 optional = false
 python-versions = ">=3.10,<4.0"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "codecraftai_interfaces-1.0.0-py3-none-any.whl", hash = "sha256:1ac02550f4de955ecba5dc9c7c8215808ec4077d5822419d45a1fa283b19914f"},
     {file = "codecraftai_interfaces-1.0.0.tar.gz", hash = "sha256:a681e27b5d90882325906997d9f55d851e1f608630ef619149149c55978baea4"},
@@ -276,6 +314,154 @@ url = "https://code-craft.ai/licensed-repository/simple"
 reference = "codecraftai"
 
 [[package]]
+name = "codecraftai-runtime"
+version = "1.0.0"
+description = "Code Craft AI - Runtime"
+optional = false
+python-versions = ">=3.10,<4.0"
+groups = ["dev"]
+files = [
+    {file = "codecraftai_runtime-1.0.0-py3-none-any.whl", hash = "sha256:7833f3bbcd3b1e131a8ec195bb55d9f529ac12cf5af263aafdbfc0d4720833a0"},
+    {file = "codecraftai_runtime-1.0.0.tar.gz", hash = "sha256:fa210d7c47ce8d579aab2ccaf0febfab4678c51537148b6a53e90d12dc218eb5"},
+]
+
+[package.dependencies]
+codecraftai-this-app = "<2.0.0"
+
+[package.source]
+type = "legacy"
+url = "https://code-craft.ai/licensed-repository/simple"
+reference = "codecraftai"
+
+[[package]]
+name = "codecraftai-testbase"
+version = "1.0.0"
+description = "Code Craft AI - TestBase"
+optional = false
+python-versions = ">=3.10,<4.0"
+groups = ["dev"]
+files = [
+    {file = "codecraftai_testbase-1.0.0-py3-none-any.whl", hash = "sha256:b60d0be7056bb842ce423cf29b918e3e5ef43cf15f8538dd86fa44a2f0c25199"},
+    {file = "codecraftai_testbase-1.0.0.tar.gz", hash = "sha256:5f369c4b3a9deed711afcd14b69852a70abc43a1909bae5d9698e59bcb1acb16"},
+]
+
+[package.dependencies]
+codecraftai-arcli = "<2.0.0"
+codecraftai-errors = "<2.0.0"
+codecraftai-interfaces = "<2.0.0"
+codecraftai-runtime = "<2.0.0"
+codecraftai-this-app = "<2.0.0"
+codecraftai-waiting = "<2.0.0"
+codecraftai-xmodules = "<2.0.0"
+pyyaml = ">=6.0.2,<7.0.0"
+
+[package.source]
+type = "legacy"
+url = "https://code-craft.ai/licensed-repository/simple"
+reference = "codecraftai"
+
+[[package]]
+name = "codecraftai-this-app"
+version = "1.0.0"
+description = "Code Craft AI - This-App"
+optional = false
+python-versions = ">=3.10,<4.0"
+groups = ["dev"]
+files = [
+    {file = "codecraftai_this_app-1.0.0-py3-none-any.whl", hash = "sha256:ecba0c68df14306d2fd737f210315c4ac84ba5858efc6b8dde533049ab4aaf89"},
+    {file = "codecraftai_this_app-1.0.0.tar.gz", hash = "sha256:b54aa31b33c60dd6e44da03ebbe1857a3c14d93a5aa35d0445da425167ee77a0"},
+]
+
+[package.dependencies]
+codecraftai-errors = "<2.0.0"
+codecraftai-extension = "<2.0.0"
+codecraftai-xmodules = "<2.0.0"
+
+[package.source]
+type = "legacy"
+url = "https://code-craft.ai/licensed-repository/simple"
+reference = "codecraftai"
+
+[[package]]
+name = "codecraftai-waiting"
+version = "1.0.0"
+description = "Code Craft AI - Waiting Package"
+optional = false
+python-versions = ">=3.10,<4.0"
+groups = ["dev"]
+files = [
+    {file = "codecraftai_waiting-1.0.0-py3-none-any.whl", hash = "sha256:cbf00b8183498a9bad4d5e3fe9f03b8610d13caca3c8371b01348f698f3df674"},
+    {file = "codecraftai_waiting-1.0.0.tar.gz", hash = "sha256:8156278ecdbd2e4d5e6ab9d2efb23fac3ead873d588af90bccc186376dc6b0cf"},
+]
+
+[package.source]
+type = "legacy"
+url = "https://code-craft.ai/licensed-repository/simple"
+reference = "codecraftai"
+
+[[package]]
+name = "codecraftai-xmodules"
+version = "1.0.0"
+description = "Code Craft AI - Python Extension Modules"
+optional = false
+python-versions = ">=3.10,<4.0"
+groups = ["dev"]
+files = [
+    {file = "codecraftai_xmodules-1.0.0-py3-none-any.whl", hash = "sha256:783735753a2f3100c8735fb6d78f1ff085aa6c99d7036a7565d73b12c705baa6"},
+    {file = "codecraftai_xmodules-1.0.0.tar.gz", hash = "sha256:6d6fb9bb83606b5b599b3412823ed4e84a1ceabe8064ba2f7873b0adad5690fa"},
+]
+
+[package.dependencies]
+codecraftai-errors = "<2.0.0"
+codecraftai-waiting = "<2.0.0"
+debugpy = ">=1.8.14,<2.0.0"
+
+[package.source]
+type = "legacy"
+url = "https://code-craft.ai/licensed-repository/simple"
+reference = "codecraftai"
+
+[[package]]
+name = "debugpy"
+version = "1.8.21"
+description = "An implementation of the Debug Adapter Protocol for Python"
+optional = false
+python-versions = ">=3.8"
+groups = ["dev"]
+files = [
+    {file = "debugpy-1.8.21-cp310-cp310-macosx_15_0_x86_64.whl", hash = "sha256:8eeab7b5462f683452c57c0126aaa5ec4e974ddb705f39ba87dff8818c8e08f9"},
+    {file = "debugpy-1.8.21-cp310-cp310-manylinux_2_34_x86_64.whl", hash = "sha256:0fddfdc130ac6d8bfc0415b0409822fa901c8f310e5c945ac5653a0352532344"},
+    {file = "debugpy-1.8.21-cp310-cp310-win32.whl", hash = "sha256:72b5d676c4cbfac3bac5bb01c138a4656e843f93f03ce2a5f4e394ad49fbee73"},
+    {file = "debugpy-1.8.21-cp310-cp310-win_amd64.whl", hash = "sha256:a7fe47fd23da57b9e0bec3f4a8ee65a2dc55782455ed7f2141d75ab5d2eaeef5"},
+    {file = "debugpy-1.8.21-cp311-cp311-macosx_15_0_universal2.whl", hash = "sha256:da456226c7b4c69e35dbe35dcee6623d912000a77816db7856a41af1c72a0264"},
+    {file = "debugpy-1.8.21-cp311-cp311-manylinux_2_34_x86_64.whl", hash = "sha256:f68b891688e61bdc08b8d364d919ff0051e0b94657b39dcd027bc3173edb7cdc"},
+    {file = "debugpy-1.8.21-cp311-cp311-win32.whl", hash = "sha256:f843a8b08c2edeaf9b1582eed4f25441af21a297c22ff16bf76a662557aa9c9e"},
+    {file = "debugpy-1.8.21-cp311-cp311-win_amd64.whl", hash = "sha256:84c564d8cc701d41843b29a92814c1f1bef6798724ca9d675c284ad9f6a547d7"},
+    {file = "debugpy-1.8.21-cp312-cp312-macosx_15_0_universal2.whl", hash = "sha256:9f96713896f39c3dff0ee841f47320c3f2983d33c341e009361bb0ebc79adc4e"},
+    {file = "debugpy-1.8.21-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:c193d474f0a211191f2b4449d2d06157c689013035bd952f3b617e0ef422b176"},
+    {file = "debugpy-1.8.21-cp312-cp312-win32.whl", hash = "sha256:4743373c1cac7f9e74a1b9915bf1dbe0e900eca657ffb170ae07ac8363205ae9"},
+    {file = "debugpy-1.8.21-cp312-cp312-win_amd64.whl", hash = "sha256:bd7ba9dd3daa7c2f942c6ca8d4695a16bf9ac16b63615261c7982bc74f7ed20c"},
+    {file = "debugpy-1.8.21-cp313-cp313-macosx_15_0_universal2.whl", hash = "sha256:13678151fc401e2d68c9880b91e28714f797d40422994572b24560ef80910a88"},
+    {file = "debugpy-1.8.21-cp313-cp313-manylinux_2_34_x86_64.whl", hash = "sha256:ecbd158386c31ffe71d46f72d44d56e66331ab9b16cad649156d514368f23ab2"},
+    {file = "debugpy-1.8.21-cp313-cp313-win32.whl", hash = "sha256:2c2ae706dec41d99a9ca1f7ebc987a83e65578363be6f6b3ac9067504917fae1"},
+    {file = "debugpy-1.8.21-cp313-cp313-win_amd64.whl", hash = "sha256:aa648733047443eb1d07682c4ef287d36a54507b643ffdf38b09a3ef002c72a0"},
+    {file = "debugpy-1.8.21-cp314-cp314-macosx_15_0_universal2.whl", hash = "sha256:9bb2a685287a2ac9b181cde89edcec64845cb51de7faaa75badb9a698bc24782"},
+    {file = "debugpy-1.8.21-cp314-cp314-manylinux_2_34_x86_64.whl", hash = "sha256:3d6922439bf33fd38a3e2c447869ebc7b97da5cd3d329ff1ef9bc06c4903437e"},
+    {file = "debugpy-1.8.21-cp314-cp314-win32.whl", hash = "sha256:15d4963bd5ffa48f0da0947fd06757fa7621945048a14ad7705431566d3c0e7c"},
+    {file = "debugpy-1.8.21-cp314-cp314-win_amd64.whl", hash = "sha256:fe0744a12353406de0ae8ccff0d0a4a666f00801a3db8fd04e7a5f761cd520e8"},
+    {file = "debugpy-1.8.21-cp38-cp38-macosx_15_0_x86_64.whl", hash = "sha256:0042da0ecd0a8b50dc4a54395ecd870d258d73fa18776f50c91fdcabdcad2675"},
+    {file = "debugpy-1.8.21-cp38-cp38-manylinux_2_34_x86_64.whl", hash = "sha256:ffd932c6796afadab6993ec96745918a8cb2444dbd392074f769db5ea40ab440"},
+    {file = "debugpy-1.8.21-cp38-cp38-win32.whl", hash = "sha256:4e7c2d784d78ad4b71a5f8cd7b59c167719ec8a7a0211dbb3eb1bfeda78bc4e2"},
+    {file = "debugpy-1.8.21-cp38-cp38-win_amd64.whl", hash = "sha256:aa9d941d6dfe3d0407e4b3ca0b9ec466030e260fbf1174094f68785680f66db6"},
+    {file = "debugpy-1.8.21-cp39-cp39-macosx_15_0_x86_64.whl", hash = "sha256:9f5171176a0084b95d2ebe55a4d1f7b2a75b74c5dbec577ebd3a85c740551c36"},
+    {file = "debugpy-1.8.21-cp39-cp39-manylinux_2_34_x86_64.whl", hash = "sha256:f15c10084f9861b5e8414a48f18f8e4aadf51a98a59e72c16aa28281ca994672"},
+    {file = "debugpy-1.8.21-cp39-cp39-win32.whl", hash = "sha256:4e70cc8b5079f885cb43910924ee0aab73b8b6b2a14eff23afdd9895d86e79eb"},
+    {file = "debugpy-1.8.21-cp39-cp39-win_amd64.whl", hash = "sha256:e935f9dc0501be523c8a8e1853c39432e1354e9ece717ae5998fd2371c4542c3"},
+    {file = "debugpy-1.8.21-py2.py3-none-any.whl", hash = "sha256:b1e37d333663c8851516a47364ef473da127f9caebe4417e6df6f5825a7e9a92"},
+    {file = "debugpy-1.8.21.tar.gz", hash = "sha256:a3c53278e84c94e11bd87c53970ec391d1a67396c8b22609fcac576520e611a6"},
+]
+
+[[package]]
 name = "idna"
 version = "3.19"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -296,7 +482,7 @@ version = "6.0.3"
 description = "YAML parser and emitter for Python"
 optional = false
 python-versions = ">=3.8"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "PyYAML-6.0.3-cp38-cp38-macosx_10_13_x86_64.whl", hash = "sha256:c2514fceb77bc5e7a2f7adfaa1feb2fb311607c9cb518dbc378688ec73d8292f"},
     {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:9c57bb8c96f6d1808c030b1687b9b5fb476abaa47f0db9c0101f5e9f394e97f4"},
@@ -416,4 +602,4 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "318d25413a183a37bdd8ac0a2c433dec7ec52b14c939c2111545c18cb61feb4b"
+content-hash = "1a3d48fc8d8c564448b537a25360ec4359afbabf71b1c9d9bb6e39d6d02554a5"

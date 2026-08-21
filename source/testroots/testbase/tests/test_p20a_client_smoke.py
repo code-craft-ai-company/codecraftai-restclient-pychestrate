@@ -9,8 +9,9 @@
     .. moduleauthor:: Myron Walker <myron.walker@gmail.com>
 """
 
+from ccai import testbase
+
 import os
-import unittest
 
 import yaml
 
@@ -45,70 +46,69 @@ class _DummyCredential(BaseCredential):
         return
 
 
-class PychestrateRestClientSmokeTests(unittest.TestCase):
+# ----------------------------------------------------------------------
+# PychestrateRestClientSmokeTests
+# ----------------------------------------------------------------------
+
+"""
+    Verify the generated client has the expected groups and that the
+    generated schemas reflect the OpenAPI specification.
+"""
+
+def test_client_exposes_expected_groups():
     """
-        Verify the generated client has the expected groups and that the
-        generated schemas reflect the OpenAPI specification.
+        The generated top-level client should expose `runs`, `clients`,
+        and `pods` properties returning the right group types.
     """
+    credential = _DummyCredential()
+    client = PychestrateRestClient(host="example.invalid", credential=credential)
 
-    def test_client_exposes_expected_groups(self):
-        """
-            The generated top-level client should expose `runs`, `clients`,
-            and `pods` properties returning the right group types.
-        """
-        credential = _DummyCredential()
-        client = PychestrateRestClient(host="example.invalid", credential=credential)
+    runs_group = client.runs
+    clients_group = client.clients
+    pods_group = client.pods
 
-        runs_group = client.runs
-        clients_group = client.clients
-        pods_group = client.pods
+    testbase.assert_true(isinstance(runs_group, RunsApiGroup))
+    testbase.assert_true(isinstance(clients_group, ClientsApiGroup))
+    testbase.assert_true(isinstance(pods_group, PodsApiGroup))
+    return
 
-        self.assertIsInstance(runs_group, RunsApiGroup)
-        self.assertIsInstance(clients_group, ClientsApiGroup)
-        self.assertIsInstance(pods_group, PodsApiGroup)
-        return
+def test_run_schema_required_fields_match_spec():
+    """
+        The generated `Run` model should declare the required fields
+        advertised by the OpenAPI spec.
+    """
+    with open(EMBEDDED_SPEC, "r", encoding="utf-8") as sf:
+        spec = yaml.safe_load(sf)
 
-    def test_run_schema_required_fields_match_spec(self):
-        """
-            The generated `Run` model should declare the required fields
-            advertised by the OpenAPI spec.
-        """
-        with open(EMBEDDED_SPEC, "r", encoding="utf-8") as sf:
-            spec = yaml.safe_load(sf)
+    run_schema = spec["components"]["schemas"]["Run"]
+    expected_required = set(run_schema.get("required", []))
 
-        run_schema = spec["components"]["schemas"]["Run"]
-        expected_required = set(run_schema.get("required", []))
+    actual_required = set()
+    for field_name, field_descriptor in Run._fields.items():
+        if field_descriptor.required:
+            actual_required.add(field_name)
 
-        actual_required = set()
-        for field_name, field_descriptor in Run._fields.items():
-            if field_descriptor.required:
-                actual_required.add(field_name)
+    testbase.assert_equal(actual_required, expected_required)
+    return
 
-        self.assertEqual(actual_required, expected_required)
-        return
+def test_runstate_enum_values_present_in_spec():
+    """
+        `RunState` is declared as a string enum in the OpenAPI spec.
+        The generator emits it as a plain `str` Field (no enum class is
+        currently produced), so we verify the spec-level enum list is
+        intact and the `Run.state` field exists.
+    """
+    with open(EMBEDDED_SPEC, "r", encoding="utf-8") as sf:
+        spec = yaml.safe_load(sf)
 
-    def test_runstate_enum_values_present_in_spec(self):
-        """
-            `RunState` is declared as a string enum in the OpenAPI spec.
-            The generator emits it as a plain `str` Field (no enum class is
-            currently produced), so we verify the spec-level enum list is
-            intact and the `Run.state` field exists.
-        """
-        with open(EMBEDDED_SPEC, "r", encoding="utf-8") as sf:
-            spec = yaml.safe_load(sf)
+    runstate = spec["components"]["schemas"]["RunState"]
+    enum_values = runstate.get("enum", [])
 
-        runstate = spec["components"]["schemas"]["RunState"]
-        enum_values = runstate.get("enum", [])
+    expected_subset = {
+        "pending", "dispatching", "running", "completed",
+        "failed", "cancelled",
+    }
+    testbase.assert_true(expected_subset.issubset(set(enum_values)))
 
-        expected_subset = {
-            "pending", "dispatching", "running", "completed",
-            "failed", "cancelled",
-        }
-        self.assertTrue(expected_subset.issubset(set(enum_values)))
-
-        self.assertIn("state", Run._fields)
-        return
-
-
-if __name__ == "__main__":
-    unittest.main()
+    testbase.assert_true("state" in Run._fields)
+    return
