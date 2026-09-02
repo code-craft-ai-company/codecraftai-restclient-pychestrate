@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "codecraftai-restclient-pychestrate"
 description = "Code Craft AI - Rest Client for Pychestrate"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Myron Walker <myron.walker@gmail.com>"]
 readme = "README.rst"
 license = "LicenseRef-CodeCraftAI-Dual-License"
@@ -19,7 +19,7 @@ packages = [{include="ccai", from="source/packages"}]
 python = ">=3.10,<4.0"
 requests = "^2.32.4"
 pyyaml = "^6.0.2"
-codecraftai-errors = { version = "<2.0.0", source = "codecraftai" }
+codecraftai-foundations = { version = "<2.0.0", source = "codecraftai" }
 codecraftai-credentials = { version = "<2.0.0", source = "codecraftai" }
 codecraftai-restclient-base = { version = "<2.0.0", source = "codecraftai" }
 
