@@ -68,7 +68,11 @@ object-store credential is involved.
             context_msg=None,
             aspects=aspects,
         )
-        return resp.json()
+        if resp.status_code in (204, 205) or (resp.status_code == 202 and len(resp.content) == 0):
+            rtnval = None
+        else:
+            rtnval = resp.json()
+        return rtnval
 
     def artifacts_presign_upload(self, run_id: str, body: Artifactpresignrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Artifactpresignresponse:
         """
@@ -129,8 +133,11 @@ accepts uploads (409).
             context_msg=None,
             aspects=aspects,
         )
-        raw_data = resp.json()
-        rtnobj = Artifactpresignresponse.from_dict(raw_data)
+        if resp.status_code in (204, 205) or (resp.status_code == 202 and len(resp.content) == 0):
+            rtnobj = None
+        else:
+            raw_data = resp.json()
+            rtnobj = Artifactpresignresponse.from_dict(raw_data)
         return rtnobj
 
     def results_post_complete(self, run_id: str, body: Resultmanifest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Any:

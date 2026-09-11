@@ -104,8 +104,11 @@ Each import overwrites entries with the same
             context_msg=None,
             aspects=aspects,
         )
-        raw_data = resp.json()
-        rtnobj = Testcatalogentrypage.from_dict(raw_data)
+        if resp.status_code in (204, 205) or (resp.status_code == 202 and len(resp.content) == 0):
+            rtnobj = None
+        else:
+            raw_data = resp.json()
+            rtnobj = Testcatalogentrypage.from_dict(raw_data)
         return rtnobj
 
     def test_catalog_upsert(self, project_id: str, body: Testcatalogentryupsertrequest, *, exp_status: Optional[List[int]] = None, headers: Optional[Dict[str, str]] = None, aspects: Optional[AspectsRest] = None) -> Testcatalogentry:
@@ -142,6 +145,9 @@ Each import overwrites entries with the same
             context_msg=None,
             aspects=aspects,
         )
-        raw_data = resp.json()
-        rtnobj = Testcatalogentry.from_dict(raw_data)
+        if resp.status_code in (204, 205) or (resp.status_code == 202 and len(resp.content) == 0):
+            rtnobj = None
+        else:
+            raw_data = resp.json()
+            rtnobj = Testcatalogentry.from_dict(raw_data)
         return rtnobj
