@@ -15,13 +15,7 @@ import os
 
 import yaml
 
-from ccai.credentials.basecredential import BaseCredential
-
-from ccai.pychestrate.rest.client.pychestraterestclient import PychestrateRestClient
-
-from ccai.pychestrate.rest.client.groups.clients import ClientsApiGroup
-from ccai.pychestrate.rest.client.groups.pods import PodsApiGroup
-from ccai.pychestrate.rest.client.groups.runs import RunsApiGroup
+from ccai.pychestrate.rest.client.pychestraterestclient import PychestrateRestClient  # noqa: F401  (import smoke)
 
 from ccai.pychestrate.rest.client.models.runs import Run
 
@@ -35,42 +29,14 @@ EMBEDDED_SPEC = os.path.join(
 )
 
 
-class _DummyCredential(BaseCredential):
-    """
-        Inert credential used only to satisfy the client constructor signature.
-        No authentication is performed during these tests.
-    """
-
-    def __init__(self):
-        super().__init__(identifier="smoke-test", categories=["rest"])
-        return
-
-
 # ----------------------------------------------------------------------
 # PychestrateRestClientSmokeTests
 # ----------------------------------------------------------------------
 
 """
-    Verify the generated client has the expected groups and that the
-    generated schemas reflect the OpenAPI specification.
+    Verify the generated schemas reflect the OpenAPI specification.  Group
+    exposure is checked for every spec tag in test_p20b_spec_conformance.
 """
-
-def test_client_exposes_expected_groups():
-    """
-        The generated top-level client should expose `runs`, `clients`,
-        and `pods` properties returning the right group types.
-    """
-    credential = _DummyCredential()
-    client = PychestrateRestClient(host="example.invalid", credential=credential)
-
-    runs_group = client.runs
-    clients_group = client.clients
-    pods_group = client.pods
-
-    testbase.assert_true(isinstance(runs_group, RunsApiGroup))
-    testbase.assert_true(isinstance(clients_group, ClientsApiGroup))
-    testbase.assert_true(isinstance(pods_group, PodsApiGroup))
-    return
 
 def test_run_schema_required_fields_match_spec():
     """
