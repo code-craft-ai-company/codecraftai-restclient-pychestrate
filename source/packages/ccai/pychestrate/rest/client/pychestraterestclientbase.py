@@ -9,11 +9,13 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
-from requests import Session
+from requests import Response, Session
 
 from ccai.credentials.basecredential import BaseCredential
+
+from ccai.interfaces.schemaobject import SchemaObject
 
 from ccai.restclient.base.aspectsrest import AspectsRest, DEFAULT_REST_ASPECTS
 from ccai.restclient.base.restclientbase import RestClientBase
@@ -87,6 +89,40 @@ class PychestrateRestClientBase(RestClientBase):
 
         self._session = session
         return
+
+    def perform_call(self, *, leaf: str, method: str, params: Union[Dict[str, str], None],
+                     body: Union[Dict[str, Any], SchemaObject, None], exp_status: Union[int, List[int]],
+                     headers: Optional[Dict[str, str]] = None, context_msg: Optional[str] = None,
+                     aspects: Union[AspectsRest, None]) -> Response:
+        """
+            Perform a REST call, serializing a :class:`SchemaObject` request body
+            into its dictionary form first.
+
+            The generated group methods hand the typed request models straight
+            through as ``body``.  ``RestClientBase`` passes ``body`` to
+            ``requests`` as the ``json`` payload, and ``requests`` can only
+            serialize plain dictionaries, so a typed body has to be converted with
+            :meth:`SchemaObject.to_dict` before the call is prepared.  Dictionary
+            bodies pass through unchanged.
+
+            :param leaf: API leaf path.
+            :param method: HTTP method name.
+            :param params: Optional query parameters.
+            :param body: Optional request body, either a dictionary or a typed request model.
+            :param exp_status: Expected HTTP status codes.
+            :param headers: Optional request headers.
+            :param context_msg: Optional context message for logging.
+            :param aspects: Aspects controlling call behavior.
+
+            :returns: The :class:`Response` object for the call.
+        """
+        if isinstance(body, SchemaObject):
+            body = body.to_dict()
+
+        resp = super().perform_call(leaf=leaf, method=method, params=params, body=body,
+                                    exp_status=exp_status, headers=headers,
+                                    context_msg=context_msg, aspects=aspects)
+        return resp
 
     def _build_auth_headers(self, credential: BaseCredential) -> Dict[str, str]:
         """
