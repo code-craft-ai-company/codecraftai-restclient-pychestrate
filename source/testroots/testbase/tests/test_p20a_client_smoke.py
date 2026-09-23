@@ -15,7 +15,8 @@ import os
 
 import yaml
 
-from ccai.pychestrate.rest.client.pychestraterestclient import PychestrateRestClient  # noqa: F401  (import smoke)
+from ccai.pychestrate.rest.client.pychestraterestclient import PychestrateRestClient
+from ccai.pychestrate.rest.client.pychestraterestclientbase import PychestrateRestClientBase
 
 from ccai.pychestrate.rest.client.models.runs import Run
 
@@ -37,6 +38,14 @@ EMBEDDED_SPEC = os.path.join(
     Verify the generated schemas reflect the OpenAPI specification.  Group
     exposure is checked for every spec tag in test_p20b_spec_conformance.
 """
+
+def test_generated_client_imports_and_derives_from_base():
+    """
+        The generated client module imports cleanly and its client class derives from the
+        package's REST client base class.
+    """
+    testbase.assert_true(issubclass(PychestrateRestClient, PychestrateRestClientBase))
+    return
 
 def test_run_schema_required_fields_match_spec():
     """

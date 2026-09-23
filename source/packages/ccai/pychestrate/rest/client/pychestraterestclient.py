@@ -2,8 +2,6 @@
 
 from typing import Optional
 
-import weakref
-
 from ccai.credentials.basecredential import BaseCredential
 from ccai.pychestrate.rest.client.groups.agents import AgentsApiGroup
 from ccai.pychestrate.rest.client.groups.artifacts import ArtifactsApiGroup

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Union
+from typing import List
 
 from ccai.interfaces.schemafield import Field
 from ccai.interfaces.schemaobject import SchemaObject
