@@ -21,6 +21,10 @@ dependencies = [
     "codecraftai-restclient-base<2.0.0",
 ]
 
+[project.urls]
+Repository = "https://github.com/code-craft-ai-company/codecraftai-restclient-pychestrate"
+Issues = "https://github.com/code-craft-ai-company/codecraftai-restclient-pychestrate/issues"
+
 [dependency-groups]
 dev = [
     "codecraftai-testbase<2.0.0",
